@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .left {
+            width: 500px;
+            overflow: hidden;
+            float: left;
+        }
+        
+        .center {
+            width: 500px;
+            float: left;
+        }
+        
+        .playing {
+            transform: rotate(180deg);
+        }
+        
+        .mask {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background-color: black
+        }
+        
+        video {
+            display: block;
+            width: 1000px;
+            height: 500px;
+            /* text-align: center; */
+            margin: 100px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+        <div class="left">
+            <input type="text" v-model='query' @keyup.enter="searchMusic"></br>
+            <audio :src="musicurl" controls @play="play" @pause="pause">...</audio>
+            <ul v-for='items in musicList'>
+                <li>
+                    <a href="javascript:;" @click="playMusic(items.id)">{{items.name}}</a> &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:;" @click="playMv(items.mvid)" v-if="items.mvid!=0">mv</a>
+                </li>
+            </ul>
+        </div>
+        <div class="center">
+            <div class="container">
+                <img :src="picurl" alt="" width="500px" :class="{playing:flag}">
+            </div>
+            <div class="conment" v-for="items in musicComment">
+                <img :src="items.user.avatarUrl" alt="" width="30px">
+                <i>{{items.user.nickname}}</i>
+                <p>{{items.content}}</p>
+            </div>
+        </div>
+        <div class="mask" @click="hidden" v-show="isshow">
+            <video :src="mvUrl" controls></video>
+        </div>
+
+    </div>
+    <!-- 1.开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                query: '',
+                musicList: [],
+                musicurl: '',
+                picurl: '',
+                musicComment: [],
+                flag: false,
+                isshow: false,
+                mvUrl: ''
+            },
+            methods: {
+                //搜索歌曲
+                searchMusic: function() {
+                    var that = this;
+                    axios.get('https://autumnfish.cn/search?keywords=' + this.query)
+                        .then(function(response) {
+                            // console.log(response);
+                            that.musicList = response.data.result.songs;
+                        });
+
+                },
+                //播放歌曲
+                playMusic: function(musicId) {
+                    var that = this;
+                    // console.log(musicId);
+
+                    axios.get('https://autumnfish.cn/song/url?id=' + musicId)
+                        .then(function(response) {
+                            // console.log(response);
+                            // console.log(response.data.data[0].url);
+                            that.musicurl = response.data.data[0].url
+                        });
+                    // 加载写真
+                    axios.get('https://autumnfish.cn/song/detail?ids=' + musicId)
+                        .then(function(response) {
+                            that.picurl = response.data.songs[0].al.picUrl;
+                        });
+                    axios.get('https://autumnfish.cn/comment/hot?type=0&id=' + musicId)
+                        .then(function(response) {
+                            // console.log(response.data.hotComments);
+                            that.musicComment = response.data.hotComments
+                        });
+                },
+                play: function() {
+                    this.flag = true;
+                },
+                pause: function() {
+                    this.flag = false
+                },
+                playMv: function(mvid) {
+                    var that = this;
+                    axios.get('https://autumnfish.cn/mv/url?id=' + mvid)
+                        .then(function(response) {
+                            // console.log(response.data.data.url);
+                            that.isshow = 'true'
+                            that.mvUrl = response.data.data.url;
+
+                        })
+                },
+                hidden: function() {
+                    this.isshow = false;
+                    this.mvUrl = ''
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
