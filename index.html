@@ -3,69 +3,111 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>MusicPlayer1.1</title>
-    <style>
-        .left {
-            width: 500px;
-            overflow: hidden;
-            float: left;
-        }
-        
-        .center {
-            width: 500px;
-            float: left;
-        }
-        
-        .playing {
-            transform: rotate(180deg);
-        }
-        
-        .mask {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            background-color: black
-        }
-        
-        video {
-            display: block;
-            width: 1000px;
-            height: 500px;
-            /* text-align: center; */
-            margin: 100px auto;
-        }
-    </style>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 
-<body>
+<body style="background-color: cadetblue">
     <div id="app">
+        <div class="fixed">
+            <!-- 导航栏及搜索框 -->
+            <div class="navbar-wrapper">
+                <div class="container">
+                    <nav class="navbar navbar-inverse navbar-static-top">
+                        <div class="container">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </button>
+                                <a class="navbar-brand" href="#">Project name</a>
+                            </div>
+                            <div id="navbar" class="navbar-collapse collapse">
+                                <ul class="nav navbar-nav">
+                                    <li class="active"><a href="#">Home</a></li>
+                                    <li><a href="#about">About</a></li>
+                                    <li><a href="#contact">Contact</a></li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Action</a></li>
+                                            <li><a href="#">Another action</a></li>
+                                            <li><a href="#">Something else here</a></li>
+                                            <li role="separator" class="divider"></li>
+                                            <li class="dropdown-header">Nav header</li>
+                                            <li><a href="#">Separated link</a></li>
+                                            <li><a href="#">One more separated link</a></li>
+                                        </ul>
+                                    </li>
+                                    <!-- 输入框 -->
+                                    <li>
+                                        <div class="col-lg-6" style="width: 480px;top:10px">
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control" placeholder="Search for..." v-model='query' @keyup.enter="searchMusic">
+                                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
 
-        <div class="left">
-            <input type="text" v-model='query' @keyup.enter="searchMusic"></br>
-            <audio :src="musicurl" controls @play="play" @pause="pause">...</audio>
-            <ul v-for='items in musicList'>
-                <li>
-                    <a href="javascript:;" @click="playMusic(items.id)">{{items.name}}</a> &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="javascript:;" @click="playMv(items.mvid)" v-if="items.mvid!=0">mv</a>
-                </li>
-            </ul>
-        </div>
-        <div class="center">
-            <div class="container">
-                <img :src="picurl" alt="" width="500px" :class="{playing:flag}">
-            </div>
-            <div class="conment" v-for="items in musicComment">
-                <img :src="items.user.avatarUrl" alt="" width="30px">
-                <i>{{items.user.nickname}}</i>
-                <p>{{items.content}}</p>
+                </div>
             </div>
         </div>
+        <!-- 歌曲列表及写真照片 -->
+        <div class="container">
+            <div class="row index">
+                <div class="col-md-4">
+                    <ul class="list-group musicList">
+                        <li class="list-group-item" v-for='items in musicList'>
+                            <a href="javascript:;" @click="playMusic(items.id)">{{items.name}}</a>
+                            <a href="javascript:;" @click="playMv(items.mvid)" v-if="items.mvid!=0" class="badge">mv</a>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="col-md-8">
+                    <div class="focus imgBackground" style="width: 100%">
+
+                        <img :src="picurl" alt="" v-if="{playing:flag}" width="100%">
+                        <!-- <img src="img/full_res (3).jpg" alt="" width="100%" v-if="playing?!{playing:flag}:true"> -->
+                    </div>
+                    <audio :src="musicurl" controls autoplay @play="play" @pause="pause" style="width:100%"></audio>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 main" v-if="{playing:flag}">
+                    <ul class="list-group comment">
+                        <li class="list-group-item" v-for="items in musicComment">
+                            <h5>
+                                <img :src="items.user.avatarUrl" class="img-circle" width="30px">
+                                <!-- <img :src="items.user.avatarUrl" alt="" width="30px"> -->
+                                <strong style="padding-left:10px;">{{items.user.nickname}}</strong></h5>
+                            <p>{{items.content}}</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- mv遮罩层 -->
         <div class="mask" @click="hidden" v-show="isshow">
             <video :src="mvUrl" controls></video>
         </div>
-
     </div>
+
+
     <!-- 1.开发环境版本，包含了有帮助的命令行警告 -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

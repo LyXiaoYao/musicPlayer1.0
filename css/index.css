@@ -1,0 +1,59 @@
+/* .playing {
+    transform: rotate(180deg);
+} */
+
+.body {}
+
+.fixed {
+    position: fixed;
+    height: 71px;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 100;
+}
+
+.index {
+    margin-top: 80px;
+}
+
+.musicList {
+    background-color: rgba(0, 0, 0, .4);
+    overflow-y: auto;
+    height: 810px
+}
+
+.main {
+    overflow-y: auto;
+    height: 200px
+}
+
+.main {
+    overflow-y: auto;
+    height: 500px
+}
+
+.imgBackground {
+    height: 736px;
+    background: url(../img/full_res_Sat_Aug_05_2017.jpg) no-repeat center;
+    background-size: cover;
+}
+
+.mask {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: black
+}
+
+audio {
+    outline: none;
+    margin-top: 20px;
+}
+
+video {
+    display: block;
+    width: 1000px;
+    height: 500px;
+    /* text-align: center; */
+    margin: 100px auto;
+}
