@@ -2,16 +2,16 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <title>MusicPlayer1.1</title>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <script src="js/jquery.min.js"></script>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/index.css" />
 </head>
 
-<body style="background-color: cadetblue">
+<body>
     <div id="app">
         <div class="fixed">
             <!-- 导航栏及搜索框 -->
@@ -21,11 +21,11 @@
                         <div class="container">
                             <div class="navbar-header">
                                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                      <span class="sr-only">Toggle navigation</span>
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                    </button>
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
                                 <a class="navbar-brand" href="#">Project name</a>
                             </div>
                             <div id="navbar" class="navbar-collapse collapse">
@@ -34,7 +34,8 @@
                                     <li><a href="#about">About</a></li>
                                     <li><a href="#contact">Contact</a></li>
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span
+                      ></a>
                                         <ul class="dropdown-menu">
                                             <li><a href="#">Action</a></li>
                                             <li><a href="#">Another action</a></li>
@@ -47,12 +48,15 @@
                                     </li>
                                     <!-- 输入框 -->
                                     <li>
-                                        <div class="col-lg-6" style="width: 480px;top:10px">
+                                        <div class="col-lg-6" style="width: 480px; top: 10px">
                                             <div class="input-group input-group-sm">
-                                                <input type="text" class="form-control" placeholder="Search for..." v-model='query' @keyup.enter="searchMusic">
+                                                <input type="text" class="form-control" placeholder="Search for..." v-model="query" @keyup.enter="searchMusic" />
                                                 <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            <button class="btn btn-default" type="button">
+                              <span
+                                class="glyphicon glyphicon-search"
+                                aria-hidden="true"
+                              ></span>
                                                 </button>
                                                 </span>
                                             </div>
@@ -62,124 +66,143 @@
                             </div>
                         </div>
                     </nav>
-
                 </div>
             </div>
         </div>
         <!-- 歌曲列表及写真照片 -->
         <div class="container">
             <div class="row index">
-                <div class="col-md-4">
+                <div class="col-md-4" gutter="0">
                     <ul class="list-group musicList">
-                        <li class="list-group-item" v-for='items in musicList'>
-                            <a href="javascript:;" @click="playMusic(items.id)">{{items.name}}</a>
-                            <a href="javascript:;" @click="playMv(items.mvid)" v-if="items.mvid!=0" class="badge">mv</a>
-                        </li>
-                    </ul>
-
-                </div>
-                <div class="col-md-8">
-                    <div class="focus imgBackground" style="width: 100%">
-
-                        <img :src="picurl" alt="" v-if="{playing:flag}" width="100%">
-                        <!-- <img src="img/full_res (3).jpg" alt="" width="100%" v-if="playing?!{playing:flag}:true"> -->
-                    </div>
-                    <audio :src="musicurl" controls autoplay @play="play" @pause="pause" style="width:100%"></audio>
-                </div>
+                        <li class="list-group-item" v-for="items in musicList">
+                            <a href="javascript:;" @click="playMusic(items.id)" v-cloak>{{items.name}}</a
+                >
+                <a
+                  href="javascript:;"
+                  @click="playMv(items.mvid)"
+                  v-if="items.mvid!=0"
+                  class="badge"
+                  >mv</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-8 focus">
+            <div class="circle">
+              <img :src="picurl" alt="" v-if="{playing:flag}" height="100%" />
             </div>
-            <div class="row">
-                <div class="col-md-12 main" v-if="{playing:flag}">
-                    <ul class="list-group comment">
-                        <li class="list-group-item" v-for="items in musicComment">
-                            <h5>
-                                <img :src="items.user.avatarUrl" class="img-circle" width="30px">
-                                <!-- <img :src="items.user.avatarUrl" alt="" width="30px"> -->
-                                <strong style="padding-left:10px;">{{items.user.nickname}}</strong></h5>
-                            <p>{{items.content}}</p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <span>歌词区域</span>
+            <audio
+              :src="musicurl"
+              controls
+              autoplay
+              @play="play"
+              @pause="pause"
+              style="width: 100%"
+            ></audio>
+          </div>
         </div>
-        <!-- mv遮罩层 -->
-        <div class="mask" @click="hidden" v-show="isshow">
-            <video :src="mvUrl" controls></video>
+        <div class="row">
+          <div class="col-md-12 main" v-if="flag">
+            <ul class="list-group comment">
+              <li class="list-group-item" v-for="items in musicComment">
+                <h5>
+                  <img
+                    :src="items.user.avatarUrl"
+                    class="img-circle"
+                    width="30px"
+                  />
+                  <!-- <img :src="items.user.avatarUrl" alt="" width="30px"> -->
+                  <strong style="padding-left: 10px"
+                    >{{items.user.nickname}}</strong
+                  >
+                </h5>
+                <p>{{items.content}}</p>
+              </li>
+            </ul>
+          </div>
         </div>
+      </div>
+      <!-- mv遮罩层 -->
+      <div class="mask" @click="hidden" v-show="isshow">
+        <video :src="mvUrl" controls></video>
+      </div>
     </div>
-
 
     <!-- 1.开发环境版本，包含了有帮助的命令行警告 -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        var app = new Vue({
-            el: '#app',
-            data: {
-                query: '',
-                musicList: [],
-                musicurl: '',
-                picurl: '',
-                musicComment: [],
-                flag: false,
-                isshow: false,
-                mvUrl: ''
-            },
-            methods: {
-                //搜索歌曲
-                searchMusic: function() {
-                    var that = this;
-                    axios.get('https://autumnfish.cn/search?keywords=' + this.query)
-                        .then(function(response) {
-                            // console.log(response);
-                            that.musicList = response.data.result.songs;
-                        });
+      var app = new Vue({
+        el: "#app",
+        data: {
+          query: "",
+          musicList: [],
+          musicurl: "",
+          picurl: "",
+          musicComment: [],
+          flag: false,
+          isshow: false,
+          mvUrl: "",
+        },
+        methods: {
+          //搜索歌曲
+          searchMusic: function () {
+            var that = this;
+            axios
+              .get("https://autumnfish.cn/search?keywords=" + this.query)
+              .then(function (response) {
+                // console.log(response);
+                that.musicList = response.data.result.songs;
+              });
+          },
+          //播放歌曲
+          playMusic: function (musicId) {
+            var that = this;
+            // console.log(musicId);
 
-                },
-                //播放歌曲
-                playMusic: function(musicId) {
-                    var that = this;
-                    // console.log(musicId);
-
-                    axios.get('https://autumnfish.cn/song/url?id=' + musicId)
-                        .then(function(response) {
-                            // console.log(response);
-                            // console.log(response.data.data[0].url);
-                            that.musicurl = response.data.data[0].url
-                        });
-                    // 加载写真
-                    axios.get('https://autumnfish.cn/song/detail?ids=' + musicId)
-                        .then(function(response) {
-                            that.picurl = response.data.songs[0].al.picUrl;
-                        });
-                    axios.get('https://autumnfish.cn/comment/hot?type=0&id=' + musicId)
-                        .then(function(response) {
-                            // console.log(response.data.hotComments);
-                            that.musicComment = response.data.hotComments
-                        });
-                },
-                play: function() {
-                    this.flag = true;
-                },
-                pause: function() {
-                    this.flag = false
-                },
-                playMv: function(mvid) {
-                    var that = this;
-                    axios.get('https://autumnfish.cn/mv/url?id=' + mvid)
-                        .then(function(response) {
-                            // console.log(response.data.data.url);
-                            that.isshow = 'true'
-                            that.mvUrl = response.data.data.url;
-
-                        })
-                },
-                hidden: function() {
-                    this.isshow = false;
-                    this.mvUrl = ''
-                }
-            }
-        })
+            axios
+              .get("https://autumnfish.cn/song/url?id=" + musicId)
+              .then(function (response) {
+                // console.log(response);
+                // console.log(response.data.data[0].url);
+                that.musicurl = response.data.data[0].url;
+              });
+            // 加载写真
+            axios
+              .get("https://autumnfish.cn/song/detail?ids=" + musicId)
+              .then(function (response) {
+                that.picurl = response.data.songs[0].al.picUrl;
+              });
+            axios
+              .get("https://autumnfish.cn/comment/hot?type=0&id=" + musicId)
+              .then(function (response) {
+                // console.log(response.data.hotComments);
+                that.musicComment = response.data.hotComments;
+              });
+          },
+          play: function () {
+            this.flag = true;
+          },
+          pause: function () {
+            this.flag = false;
+          },
+          playMv: function (mvid) {
+            var that = this;
+            axios
+              .get("https://autumnfish.cn/mv/url?id=" + mvid)
+              .then(function (response) {
+                // console.log(response.data.data.url);
+                that.isshow = "true";
+                that.mvUrl = response.data.data.url;
+              });
+          },
+          hidden: function () {
+            this.isshow = false;
+            this.mvUrl = "";
+          },
+        },
+      });
     </script>
-</body>
-
+  </body>
 </html>
